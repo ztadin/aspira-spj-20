@@ -3,49 +3,48 @@ import Header from "./components/Header";
 import Container from "./components/Container";
 import UserFilter from "./components/UserFilter";
 import UserList from "./components/UserList";
+import AddUser from "./components/AddUser";
 import "./App.css";
-
-const users = [
-  {
-    id: 1,
-    firstName: "Marko",
-    lastName: "Matic",
-    avatar: "https://via.placeholder.com/75",
-    company: "Aspira"
-  },
-  {
-    id: 2,
-    firstName: "Ivan",
-    lastName: "Ivic",
-    avatar: "https://via.placeholder.com/75",
-    company: "Pseudocode"
-  },
-  {
-    id: 3,
-    firstName: "Filip",
-    lastName: "Filic",
-    avatar: "https://via.placeholder.com/75",
-    company: "Infobip"
-  }
-];
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      users: [...users],
+      users: [],
       filter: ""
     };
 
-    this.filterUsers = this.filterUsers.bind(this);
+    this.filteredUsers = this.filteredUsers.bind(this);
+    this.handleAddUser = this.handleAddUser.bind(this);
   }
 
-  filterUsers() {
+  filteredUsers() {
     const { users, filter } = this.state;
     return users.filter(user => {
-      const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
-      return fullName.includes(filter.toLowerCase());
+      return user.name.toLowerCase().includes(filter.toLowerCase());
     });
+  }
+
+  handleAddUser(username) {
+    const { users } = this.state;
+    if (!users.some(user => user.username === username)) {
+      fetch(`https://api.github.com/users/${username}`)
+        .then(res => (res.ok ? res.json() : null))
+        .then(data => {
+          if (data) {
+            const user = {
+              id: data.id,
+              username: data.login,
+              name: data.name || "Unknown",
+              avatar: data.avatar_url || "https://via.placeholder.com/75",
+              company: data.company || "None"
+            };
+            this.setState(state => ({
+              users: [...state.users, user]
+            }));
+          }
+        });
+    }
   }
 
   render() {
@@ -55,7 +54,14 @@ class App extends React.Component {
         <Container>
           <div className="d-flex">
             <UserFilter onChange={value => this.setState({ filter: value })} />
-            <UserList users={this.filterUsers()} />
+            <div className="p-4 w-100">
+              <div className="row justify-content-center">
+                <div className="col-3 mb-4">
+                  <AddUser onAddUser={this.handleAddUser} />
+                  <UserList users={this.filteredUsers()} />
+                </div>
+              </div>
+            </div>
           </div>
         </Container>
       </div>

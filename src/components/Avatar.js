@@ -6,7 +6,8 @@ function Avatar(props) {
     <img
       src={user.avatar}
       className="mr-3"
-      alt={`${user.firstName} ${user.lastName}`}
+      alt={user.name}
+      style={{ width: "75px", height: "75px" }}
     />
   );
 }
