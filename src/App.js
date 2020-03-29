@@ -1,45 +1,66 @@
-import React, { useState } from "react";
-import IncrementButton from "./components/IncrementButton";
-import DecrementButton from "./components/DecrementButton";
-import logo from "./logo.svg";
+import React from "react";
+import Header from "./components/Header";
+import Container from "./components/Container";
+import UserFilter from "./components/UserFilter";
+import UserList from "./components/UserList";
 import "./App.css";
 
-function App() {
-  const [counter, setCounter] = useState(0);
+const users = [
+  {
+    id: 1,
+    firstName: "Marko",
+    lastName: "Matic",
+    avatar: "https://via.placeholder.com/75",
+    company: "Aspira"
+  },
+  {
+    id: 2,
+    firstName: "Ivan",
+    lastName: "Ivic",
+    avatar: "https://via.placeholder.com/75",
+    company: "Pseudocode"
+  },
+  {
+    id: 3,
+    firstName: "Filip",
+    lastName: "Filic",
+    avatar: "https://via.placeholder.com/75",
+    company: "Infobip"
+  }
+];
 
-  const increment = value => {
-    setCounter(counter + value);
-  };
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      users: [...users],
+      filter: ""
+    };
 
-  const decrement = value => {
-    setCounter(counter - value);
-  };
+    this.filterUsers = this.filterUsers.bind(this);
+  }
 
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Simple React example</p>
-        <p>Counter Value: {counter}</p>
-        <div>
-          <IncrementButton amount={1} onIncrement={increment} />
-          <DecrementButton amount={1} onDecrement={decrement} />
-        </div>
-        <div>
-          <IncrementButton amount={10} onIncrement={increment} />
-          <DecrementButton amount={10} onDecrement={decrement} />
-        </div>
-        <div>
-          <IncrementButton amount={100} onIncrement={increment} />
-          <DecrementButton amount={100} onDecrement={decrement} />
-        </div>
-        <div>
-          <IncrementButton amount={1000} onIncrement={increment} />
-          <DecrementButton amount={1000} onDecrement={decrement} />
-        </div>
-      </header>
-    </div>
-  );
+  filterUsers() {
+    const { users, filter } = this.state;
+    return users.filter(user => {
+      const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
+      return fullName.includes(filter.toLowerCase());
+    });
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <Header />
+        <Container>
+          <div className="d-flex">
+            <UserFilter onChange={value => this.setState({ filter: value })} />
+            <UserList users={this.filterUsers()} />
+          </div>
+        </Container>
+      </div>
+    );
+  }
 }
 
 export default App;
