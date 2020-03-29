@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 class AddUser extends React.Component {
   constructor(props) {
@@ -43,5 +44,9 @@ class AddUser extends React.Component {
     );
   }
 }
+
+AddUser.propTypes = {
+  onAddUser: PropTypes.func.isRequired
+};
 
 export default AddUser;

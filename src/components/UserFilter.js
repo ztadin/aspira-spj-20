@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 function UserFilter(props) {
   const { onChange } = props;
@@ -13,5 +14,9 @@ function UserFilter(props) {
     </div>
   );
 }
+
+UserFilter.propTypes = {
+  onChange: PropTypes.func.isRequired
+};
 
 export default UserFilter;

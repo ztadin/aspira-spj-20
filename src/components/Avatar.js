@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 function Avatar(props) {
   const { user } = props;
@@ -11,5 +12,12 @@ function Avatar(props) {
     />
   );
 }
+
+Avatar.propTypes = {
+  user: PropTypes.shape({
+    avatar: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired
+  }).isRequired
+};
 
 export default Avatar;
