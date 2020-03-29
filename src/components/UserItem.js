@@ -3,9 +3,9 @@ import Avatar from "./Avatar";
 import UserInfo from "./UserInfo";
 
 function UserItem(props) {
-  const { user } = props;
+  const { user, dark } = props;
   return (
-    <div className="card">
+    <div className={`card ${dark ? "bg-light" : ""}`}>
       <div className="card-body">
         <div className="media">
           <Avatar user={user} />

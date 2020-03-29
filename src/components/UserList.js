@@ -12,10 +12,14 @@ function UserList(props) {
           <AddUser />
         </div>
       </div>
-      {users.map(user => (
+      {users.map((user, index) => (
         <div className="row justify-content-center">
           <div className="col-3 mb-4">
-            <UserItem user={user} key={user.id} />
+            {index % 2 === 0 ? (
+              <UserItem user={user} key={user.id} />
+            ) : (
+              <UserItem user={user} key={user.id} dark={true} />
+            )}
           </div>
         </div>
       ))}
